@@ -1,0 +1,66 @@
+
+window.addEventListener('load', () => {
+  const canvas = document.getElementById('canvas');
+  const btn = document.querySelector('.btn');
+  const context = canvas.getContext('2d');
+
+// add event listener on double click to canvas
+  canvas.addEventListener('dblclick', function(e) {
+  context.clearRect(0, 0, endX, endY);
+  
+});
+
+  canvas.width = 0.8 * window.innerWidth;
+  canvas.height = 0.7 * window.innerHeight;
+
+  let startX,
+    startY,
+    endX,
+    endY = 0;
+
+  let currentX = canvas.getBoundingClientRect().left + window.scrollX;
+  let currentY = canvas.getBoundingClientRect().top + window.scrollY;
+
+  let rectArr = [];
+
+  canvas.addEventListener('mousedown', (e) => {
+    startX = e.clientX - currentX;
+    startY = e.clientY - currentY;
+  });
+
+  canvas.addEventListener('mouseup', (e) => {
+    endX = e.clientX - currentX;
+    endY = e.clientY - currentY;
+
+    drawRectangle();
+   });
+   
+
+  function drawRectangle() {
+    context.beginPath();
+    context.fillStyle = randomColor();
+
+    context.moveTo(startX, startY);
+    context.lineTo(startX, endY);
+    context.lineTo(endX, endY);
+    context.lineTo(endX, startY);
+
+    context.fill();
+    context.setLineDash([]);
+    context.stroke();
+    context.closePath();
+  }
+   
+  function randomColor() {
+    let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    return randomColor;
+  }
+
+  btn.addEventListener(
+    'click',
+    () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    },
+    false
+  );
+});
